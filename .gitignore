@@ -1,0 +1,18 @@
+# Entorno virtual de Python
+backend/venv/
+
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+
+# Base de datos local
+db.sqlite3
+
+# Dependencias de Node.js
+frontend/node_modules/
+
+# Archivos de build de React
+frontend/build/
+
+# Archivos de entorno
+.env
