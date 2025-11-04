@@ -1,0 +1,549 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intranet HoruNAP - UNAP</title>
+    {% load static %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: 
+                linear-gradient(
+                    rgba(30, 60, 114, 0.3),
+                    rgba(42, 82, 152, 0.4)
+                ),
+                url('{% static "images/1.jpg" %}') center/cover;
+            animation: backgroundMove 20s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efecto de partículas animadas en el fondo - AZUL */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(74, 144, 226, 0.1) 2%, transparent 20%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 2%, transparent 20%),
+                radial-gradient(circle at 40% 40%, rgba(30, 60, 114, 0.2) 3%, transparent 30%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% {
+                background-position: center center;
+            }
+            50% {
+                background-position: 10% 20%;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px);
+            }
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 450px;
+            animation: slideIn 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #2a5298, transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideIn 0.8s ease-out 0.2s both;
+        }
+
+        .unap-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .intranet-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #2a5298;
+            margin: 15px 0;
+            text-shadow: 
+                0 2px 4px rgba(0,0,0,0.3),
+                0 0 10px rgba(42, 82, 152, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .intranet-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #2a5298, transparent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            animation: slideIn 0.8s ease-out 0.4s both;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1e3c72;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid #e8ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #1e3c72;
+            background: white;
+            box-shadow: 
+                0 0 0 3px rgba(30, 60, 114, 0.1),
+                0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #1e3c72;
+            transition: all 0.3s ease;
+        }
+
+        input:focus + .input-icon {
+            color: #2a5298;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.8s ease-out 0.6s both;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(30, 60, 114, 0.6),
+                0 0 0 2px rgba(42, 82, 152, 0.3);
+            animation: pulse 1s ease-in-out;
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            animation: slideIn 0.8s ease-out 0.8s both;
+        }
+
+        .forgot-link {
+            color: #1e3c72;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .forgot-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #2a5298;
+            transition: width 0.3s ease;
+        }
+
+        .forgot-link:hover {
+            color: #2a5298;
+        }
+
+        .forgot-link:hover::after {
+            width: 100%;
+        }
+
+        .error {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            border-left: 4px solid #c62828;
+            animation: shake 0.5s ease-in-out;
+            box-shadow: 0 3px 10px rgba(198, 40, 40, 0.2);
+        }
+
+        .success {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            border-left: 4px solid #2e7d32;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .system-footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            animation: slideIn 0.8s ease-out 1s both;
+        }
+
+        /* Efectos de carga */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .debug-info {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #666;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .debug-info a {
+            color: #2a5298;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .debug-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 20px;
+                padding: 30px 25px;
+            }
+            
+            .intranet-title {
+                font-size: 1.8rem;
+            }
+            
+            .unap-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="header">
+            <div class="unap-title">Universidad Nacional de la Amazonía Peruana</div>
+            <div class="intranet-title">INTRANET HORUNAP</div>
+        </div>
+
+        {% if form.errors %}
+        <div class="error">
+            ❌ Error: Usuario o contraseña incorrectos
+            {% if debug %}
+            <div style="font-size: 12px; margin-top: 8px;">
+                Debug: Verifica que el usuario esté activo en el admin
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="success">
+                ✅ {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- FORMULARIO CORREGIDO QUE SÍ FUNCIONA -->
+        <form method="post" action=".">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="username">Nombre de usuario:</label>
+                <div class="input-container">
+                    <input type="text" id="username" name="username" placeholder="Ingresa tu usuario" required autofocus value="{{ form.username.value|default:'' }}">
+                    <span class="input-icon">👤</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <div class="input-container">
+                    <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+                    <span class="input-icon">🔒</span>
+                </div>
+            </div>
+
+            <!-- CAMPO NEXT IMPORTANTE -->
+            <input type="hidden" name="next" value="{{ next|default:'/users/' }}">
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                🚀 INICIAR SESIÓN
+            </button>
+        </form>
+
+        <div class="footer">
+            <a href="#" class="forgot-link">
+                ¿Olvidaste tu contraseña?
+            </a>
+        </div>
+
+        <!-- Información de ayuda -->
+        <div class="debug-info">
+            <p>¿Problemas con el login? Prueba con:</p>
+            <p><strong>Usuario:</strong> docente_test | <strong>Contraseña:</strong> docente123</p>
+            <p>O usa: <a href="/admin/">Admin Django</a> para verificar usuarios</p>
+        </div>
+    </div>
+
+    <script>
+        // Script de carga mejorado
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const btn = document.getElementById('loginBtn');
+            const originalText = btn.innerHTML;
+            
+            // Mostrar efecto de carga
+            btn.innerHTML = '<span class="loading"></span> INGRESANDO...';
+            btn.disabled = true;
+            
+            // Permitir el envío del formulario
+            // No prevenir el comportamiento por defecto
+            
+            // Restaurar botón después de 5 segundos por si falla
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 5000);
+        });
+
+        // Efectos de entrada en los inputs
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Auto-focus en el campo de usuario
+        document.getElementById('username').focus();
+
+        // Efecto de partículas dinámicas (opcional)
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                width: 4px;
+                height: 4px;
+                background: rgba(42, 82, 152, 0.6);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 1;
+                animation: floatParticle 8s linear infinite;
+            `;
+            
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.remove();
+                }
+            }, 8000);
+        }
+
+        // Crear partículas cada 500ms
+        setInterval(createParticle, 500);
+
+        // Agregar CSS para animación de partículas
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes floatParticle {
+                0% {
+                    transform: translateY(100vh) scale(0);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                90% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-100px) scale(1);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

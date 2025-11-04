@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Docente - HoruNAP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .welcome-message h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .asignacion-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+        }
+        
+        .curso-item {
+            padding: 12px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 3px solid #28a745;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+        
+        .empty-state i { /* Assuming you might add icons later */
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="welcome-message">
+                <h1>🎓 Panel del Docente - HoruNAP</h1>
+                <p style="color: #6c757d; font-size: 1.2em;">
+                    Bienvenido, <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+                </p>
+                <p style="color: #8592a3; margin-top: 5px;">
+                    {{ hoy|date:"l, d F Y" }}
+                </p>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="{% url 'dashboard_docente' %}" class="btn">🏠 Inicio</a>
+                <a href="{% url 'mi_horario' %}" class="btn">📅 Mi Horario</a>
+                <a href="{% url 'mi_disponibilidad' %}" class="btn">⏰ Mi Disponibilidad</a>
+                
+                <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0; padding: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn" style="background: #dc3545; border: none; cursor: pointer; margin-top: 10px;">
+                        🚪 Cerrar Sesión
+                    </button>
+                </form>
+                </div>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h2>📊 Resumen Académico</h2>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ cursos.count }}</span>
+                        <span>Cursos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ asignaciones.count }}</span>
+                        <span>Asignaciones</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ disponibilidades.count }}</span>
+                        <span>Bloques Disponibles</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h2>📅 Mis Asignaciones</h2>
+                {% if asignaciones %}
+                    {% for asignacion in asignaciones %}
+                    <div class="asignacion-item">
+                        <strong>{{ asignacion.curso.nombre }}</strong><br>
+                        <small>Código: {{ asignacion.curso.codigo }}</small><br>
+                        📍 <strong>Aula:</strong> {{ asignacion.aula.nombre }}<br>
+                        🕒 <strong>Horario:</strong> {{ asignacion.get_dia_semana_display }} - {{ asignacion.get_bloque_horario_display }}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div>📝</div>
+                        <p>No tienes asignaciones actualmente</p>
+                        <p>Contacta con administración para asignarte cursos.</p>
+                    </div>
+                {% endif %}
+                <a href="{% url 'mi_horario' %}" class="btn">
+                    📋 Ver Horario Completo
+                </a>
+            </div>
+
+            <div class="card">
+                <h2>📚 Mis Cursos</h2>
+                {% if cursos %}
+                    {% for curso in cursos %}
+                    <div class="curso-item">
+                        <strong>{{ curso.codigo }}</strong><br>
+                        {{ curso.nombre }}<br>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div>📚</div>
+                        <p>No tienes cursos asignados</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="card">
+                <h2>⚡ Acciones Rápidas</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <a href="{% url 'mi_disponibilidad' %}" class="btn">
+                        ⏰ Gestionar Disponibilidad
+                    </a>
+                    <a href="{% url 'mi_horario' %}" class="btn">
+                        📅 Ver Horario Semanal
+                    </a>
+                    <button class="btn" style="background: #28a745;">
+                        📝 Registrar Asistencia (Próximamente)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    // Actualizar la hora en tiempo real
+    function actualizarHora() {
+        const ahora = new Date();
+        const opciones = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        document.getElementById('hora-actual').textContent = 
+            ahora.toLocaleDateString('es-ES', opciones);
+    }
+    
+    // Actualizar cada segundo
+    setInterval(actualizarHora, 1000);
+    actualizarHora(); // Ejecutar inmediatamente
+
+    // Efectos para las tarjetas
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+
+    // Notificación de nuevas asignaciones
+    function verificarNuevasAsignaciones() {
+        // Aquí podrías hacer una llamada AJAX para verificar nuevas asignaciones
+        console.log('Verificando nuevas asignaciones...');
+    }
+    
+    // Verificar cada 30 segundos
+    setInterval(verificarNuevasAsignaciones, 30000);
+</script>
