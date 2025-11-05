@@ -267,17 +267,16 @@
                 <span>Total de Clases Asignadas</span>
             </div>
             <div class="resumen-item">
-                <span class="resumen-numero dias-activos">
-                    {% with dias=asignaciones.values_list 'dia_semana' %}
-                        {{ dias|length }}
-                    {% endwith %}
-                </span>
-                <span>Días con Clases</span>
+                <span class="resumen-numero dias-activos">5</span>
+                <span>Días Académicos</span>
             </div>
             <div class="resumen-item">
                 <span class="resumen-numero horas-semana">
-                    {{ asignaciones.count|add:0 }}
-
+                    {% if asignaciones.count %}
+                        {{ asignaciones.count|add:asignaciones.count }}
+                    {% else %}
+                        0
+                    {% endif %}
                 </span>
                 <span>Horas Semanales</span>
             </div>
